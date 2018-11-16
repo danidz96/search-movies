@@ -13,6 +13,13 @@ class App extends Component {
     this.setState({ results })
   }
 
+  _renderResults = () => {
+    const { results } = this.state
+    return results.map(item => {
+      return <p key={item.imdbID}>{item.Title}</p>
+    })
+  }
+
   render() {
     return (
       <div className="App">
@@ -20,7 +27,7 @@ class App extends Component {
         <div className="SearchForm-wrapper">
           <SearchForm onResults={this._handleResults}/>
         </div>
-        {this.state.results.length === 0 ? <p>Sin resultados</p> : <p>Con resultados</p>}
+        {this.state.results.length === 0 ? <p>Sin resultados</p> : this._renderResults() }
       </div>
     );
   }
