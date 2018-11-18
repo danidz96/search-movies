@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 const API_KEY = "9a5934eb"
 
-export default class SearchForm extends Component {
+export class SearchForm extends Component {
   state = {
     inputText: ''
   }
