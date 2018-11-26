@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
+import { Switch, Route } from 'react-router-dom';
+
 import './App.css';
 import 'bulma/css/bulma.css'
-import { Title } from './components/Title'
-import { SearchForm } from './components/SearchForm';
+
 import { MoviesList } from './components/MoviesList';
+import { Home } from './pages/Home'
+import { Detail } from './pages/Detail'
+import { NotFound } from './pages/NotFound'
 
 class App extends Component {
   state = {
@@ -20,11 +24,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Title>Search Movies</Title>
-        <div className="SearchForm-wrapper">
-          <SearchForm onResults={this._handleResults}/>
-        </div>
-        {this.state.usedSearch ? this._renderResults() : <small>Use the form to search a movie or tv show <span role="img">🔍</span></small>}
+        <Switch>
+          <Route exact path='/' component={Home} />
+          <Route path='/detail/:itemId' component={Detail} />
+          <Route component={NotFound} />
+        </Switch>
       </div>
     );
   }
