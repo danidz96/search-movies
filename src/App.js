@@ -7,12 +7,15 @@ import { MoviesList } from './components/MoviesList';
 
 class App extends Component {
   state = {
-    results: []
+    results: [],
+    usedSearch: false
   }
 
   _handleResults = (results) => {
-    this.setState({ results })
+    this.setState({ results, usedSearch: true })
   }
+
+  _renderResults = () => this.state.results.length === 0 ? <p>No results found...</p> : <MoviesList movies={this.state.results} />
 
   render() {
     return (
@@ -21,7 +24,7 @@ class App extends Component {
         <div className="SearchForm-wrapper">
           <SearchForm onResults={this._handleResults}/>
         </div>
-        {this.state.results.length === 0 ? <p>Sin resultados</p> : <MoviesList movies={this.state.results} />}
+        {this.state.usedSearch ? this._renderResults() : <small>Use the form to search a movie or tv show <span role="img">🔍</span></small>}
       </div>
     );
   }

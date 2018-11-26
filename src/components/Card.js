@@ -11,19 +11,19 @@ export class Card extends Component {
   render() {
     const { poster, title, year } = this.props;
     return (
-      <div clasName="card">
-        <div clasName="card-image">
-          <figure clasName="image">
+      <div className="card">
+        <div className="card-image">
+          <figure className="image">
             <img src={poster} alt={title} />
           </figure>
         </div>
-        <div clasName="card-content">
-          <div clasName="media">
-            <div clasName="media-left">
+        <div className="card-content">
+          <div className="media">
+            <div className="media-left">
             </div>
-            <div clasName="media-content">
-              <p clasName="title is-4">{title}</p>
-              <p clasName="subtitle is-6">{year}</p>
+            <div className="media-content">
+              <p className="title is-4">{title}</p>
+              <p className="subtitle is-6">{year}</p>
             </div>
           </div>
         </div>
