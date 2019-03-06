@@ -1,47 +1,44 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect } from 'react';
 
-import { ButtonBackToHome } from '../components/ButtonBackToHome'
+import { ButtonBackToHome } from '../components/ButtonBackToHome';
 
-const API_KEY = '4287ad07'
+const API_KEY = '9a5934eb';
 
-export class Detail extends Component {
-  static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.object,
-      isExact: PropTypes.bool,
-      path: PropTypes.string,
-      url: PropTypes.string
-    })
-  }
+export const Detail = (props) => {
+	const [ item, setItem ] = useState({});
+	const [ loading, setLoading ] = useState(false);
 
-  state = { item: {} }
+	const fetchMovie = async ({ id }) => {
+		setLoading(true);
+		try {
+			const response = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&i=${id}`);
+			const data = await response.json();
+			setItem(data);
+		} catch (error) {
+			console.log(error);
+		}
+		setLoading(false);
+	};
 
-  _fetchMovie ({ id }) {
-    fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&i=${id}`)
-      .then(res => res.json())
-      .then(item => {
-        this.setState({ item })
-      })
-  }
+	useEffect(() => {
+		const { itemId } = props.match.params;
+		fetchMovie({ id: itemId });
+	}, []);
 
-  componentDidMount () {
-    const { itemId } = this.props.match.params
-    this._fetchMovie({ id: itemId })
-  }
-
-  render () {
-    const { Title, Poster, Actors, Metascore, Plot } = this.state.item
-
-    return (
-      <div>
-        <ButtonBackToHome />
-        <h1>{Title}</h1>
-        <img src={Poster} alt="poster" />
-        <h3>{Actors}</h3>
-        <span>{Metascore}</span>
-        <p>{Plot}</p>
-      </div>
-    )
-  }
-}
+	return (
+		<div>
+			<ButtonBackToHome />
+			{loading ? (
+				<p>Loading...</p>
+			) : (
+				<div>
+					<h1>{item.Title}</h1>
+					<img src={item.Poster} alt="poster" />
+					<h3>{item.Actors}</h3>
+					<span>{item.Metascore}</span>
+					<p>{item.Plot}</p>
+				</div>
+			)}
+		</div>
+	);
+};

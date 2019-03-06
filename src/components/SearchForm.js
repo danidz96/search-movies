@@ -1,45 +1,38 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react';
 
-const API_KEY = "9a5934eb"
+const API_KEY = '9a5934eb';
 
-export class SearchForm extends Component {
-  state = {
-    inputText: ''
-  }
+export const SearchForm = (props) => {
+	const [ inputText, setInputText ] = useState('');
 
-  _handleChange = (e) => {
-    this.setState({
-      inputText: e.target.value
-    })
-  }
+	const handleChange = (e) => {
+		setInputText(e.target.value);
+	};
 
-  _handleSubmit = (e) => {
-    e.preventDefault()
-    fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${this.state.inputText}`)
-    .then(res => res.json())
-    .then(data => {
-      const { Search = [], totalResults } = data;
-      console.log(Search, totalResults);
-      this.props.onResults(Search)
-    })
-  }
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		props.isLoading(true);
+		try {
+			const response = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${inputText}`);
+			const data = await response.json();
+			const { Search = [] } = data;
+			props.onResults(Search);
+		} catch (error) {
+			console.log(error);
+		}
+		props.isLoading(false);
+	};
 
-  render() {
-    return (
-      <form onSubmit={this._handleSubmit}>
-        <div className="field has-addons">
-          <div className="control">
-            <input 
-              className="input"
-              onChange={this._handleChange} 
-              type="text" 
-              placeholder="Movie to search..." />
-          </div>
-          <div className="control">
-            <button className="button is-info">Search</button>
-          </div>
-        </div>
-      </form>
-    )
-  }
-}
+	return (
+		<form onSubmit={handleSubmit}>
+			<div className="field has-addons">
+				<div className="control">
+					<input className="input" onChange={handleChange} type="text" placeholder="Movie to search..." />
+				</div>
+				<div className="control">
+					<button className="button is-info">Search</button>
+				</div>
+			</div>
+		</form>
+	);
+};
